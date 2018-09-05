@@ -39,6 +39,15 @@ public class StuController {
 		return "add";
 		
 	}
+	/**注销
+	 * @return
+	 */
+	@RequestMapping("zx")
+	public String zx(HttpSession session){
+		session.invalidate();
+		return "redirect:/jpa/tologin";
+		
+	}
 	
 	/**添加
 	 * @param stu
