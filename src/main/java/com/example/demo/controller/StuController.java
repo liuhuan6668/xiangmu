@@ -6,14 +6,25 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dao.StuDao;
 import com.example.demo.dto.Stu;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+@Api(value = "学生管理")
 @Controller
 @RequestMapping("jpa")
 public class StuController {
@@ -23,13 +34,38 @@ public class StuController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("list")
+	/*@RequestMapping("list")
 	public String findlist(Model model){
 		List<Stu> list=dao.findAll();
 		model.addAttribute("list", list);
 		return "list";
 		
+	}*/
+	/**分页
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("list")
+	public String fylist(Model model,String name,@RequestParam(defaultValue="0")int page,
+			@RequestParam(defaultValue="3")int size){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Stu> pages=dao.fylist(pageable);
+		model.addAttribute("pages", pages);
+		model.addAttribute("name", name);
+		return "fylist2";
+		
 	}
+	 /*@RequestMapping("list")
+	    public ModelAndView list(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "3")Integer size,Model model){
+	        Sort sort = new Sort(Sort.Direction.ASC, "id");
+	        if(page<0){
+	            page=0;
+	        }
+	        Pageable pageable =  new PageRequest(page*1-1, size, sort);
+	        Page<Stu> pages = dao.findAll(pageable);
+	        model.addAttribute("pages",pages);
+	        return new ModelAndView("fylist");
+	    }*/
 	
 	/**跳转页面
 	 * @return
@@ -53,7 +89,8 @@ public class StuController {
 	 * @param stu
 	 * @return
 	 */
-	@RequestMapping("add")
+	@ApiOperation(notes="添加",value="woadd")
+	@RequestMapping(value="add",method=RequestMethod.POST)
 	public String add(Stu stu){
 		dao.save(stu);
 		

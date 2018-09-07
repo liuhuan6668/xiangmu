@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+<h1>欢迎用户<font color="red" size="10">"<span th:text="${session.stu2.name}"></span>"</font>登录</h1>
+<h3><a th:href="@{zx}">注销</a></h3>
+	  <form role="form" method="post" action="list" id='f' style="border:1px solid red">
+  	<div style="display:none">
+	  	页数(从0开始)：<input  name="page" id="page" th:value="${pages.number}"><br>
+	  	<!-- 页长：<input name="size" th:value="${pages.size}"><br> -->
+	
+  	</div>
+  	<div class="form-group">
+	  	<input class="form-contrl" placeholder="请输入匹配名" name="name" th:value="${name}">
+	  	<input class="btn btn-info btn-sm" type="submit" value="查询">
+  	</div>
+  </form>
+   <script>
+   	function goto(p){
+   		page.value=p*1-1;
+   		f.submit();
+   	}
+   </script>
+<table class="table table-hover table-striped table-bordered table-condensed">
+  <tr>
+    <th>ID</th>
+    <th>姓名</th>
+    <th>性别</th>
+    <th>年龄</th>
+    <th>操作<button class="btn btn-info btn-sm" onclick="location='toadd'">添加</button></th>
+  </tr>
+  <tr th:each="b:${pages.content}">
+    <td th:text="${b.id}"></td>
+    <td th:text="${b.name}"></td>
+    <td th:text="${b.sex}"></td>
+    <td th:text="${b.age}"></td>
+    <td> <a class="btn btn-success btn-sm" th:href="@{toupdate(id=${b.id})}">修改</a>
+    <a class="btn btn-warning btn-sm" th:href="@{delete(id=${b.id})}">删除</a></td>
+  </tr>
+</table>
+<div th:replace="page/page::page1"> </div>
+</body>
+</html>

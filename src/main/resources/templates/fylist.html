@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+<h1>欢迎用户<font color="red" size="10">"<span th:text="${session.stu2.name}"></span>"</font>登录</h1>
+<h3><a th:href="@{zx}">注销</a></h3>
+<div>
+	
+<table class="table table-hover table-striped table-bordered table-condensed">
+  <tr>
+    <th>ID</th>
+    <th>姓名</th>
+    <th>性别</th>
+    <th>年龄</th>
+    <th>操作<button class="btn btn-info btn-sm" onclick="location='toadd'">添加</button></th>
+  </tr>
+  <tr th:each="b:${pages.content}">
+    <td th:text="${b.id}"></td>
+    <td th:text="${b.name}"></td>
+    <td th:text="${b.sex}"></td>
+    <td th:text="${b.age}"></td>
+    <td> <a class="btn btn-success btn-sm" th:href="@{toupdate(id=${b.id})}">修改</a>
+    <a class="btn btn-warning btn-sm" th:href="@{delete(id=${b.id})}">删除</a></td>
+  </tr>
+</table>
+	<form action="list" id="f" method="post">
+		页数:<input name="page" id="page" th:value="${pages.number}"><br>
+		<input name="name" th:value="${name}"><br>
+		<input type="submit" value="确定">
+	</form>
+	<script>
+		function goto(p){
+			
+			page.value=p*1-1;
+			f.submit();
+		}
+	
+	</script>
+
+
+  	
+    <a th:href="@{'javascript:goto('+${pages.totalPages}+')'}" th:text="'尾页('+${pages.totalPages}+')'">尾页</a> 
+  
+<div>
+</body>
+</html>
